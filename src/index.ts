@@ -57,15 +57,19 @@ async function checkHealth(): Promise<void> {
   }
 }
 
+interface CommandsResponse {
+  commands: Command[];
+}
+
 async function fetchCommands(): Promise<Command[]> {
-  const res = await http.get<Command[]>(COMMANDS_URL);
+  const res = await http.get<CommandsResponse>(COMMANDS_URL);
   log({
     timestamp: timestamp(),
     step: 'fetch-commands',
     request: { method: 'GET', url: COMMANDS_URL },
     response: { status: res.status, data: res.data },
   });
-  return res.data;
+  return res.data.commands;
 }
 
 async function sendLoopback(command: Command, index: number): Promise<void> {
